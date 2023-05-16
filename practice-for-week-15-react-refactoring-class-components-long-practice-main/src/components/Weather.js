@@ -22,6 +22,14 @@ import {useState, useEffect} from 'react'
 
 function Weather(props) {
   const [weather, setWeather] = useState(null)
+
+  useEffect (() => {
+    navigator.geolocation?.getCurrentPosition(
+        pollWeather,
+        (err) => console.log(err),
+        { timeout: 10000 }
+      )
+  }, [])
   let content = <div className='loading'>loading weather...</div>;
       const pollWeather = async (location) => {
         let url = 'http://api.openweathermap.org/data/2.5/weather?';
@@ -48,7 +56,7 @@ function Weather(props) {
         const res = await fetch(url);
         if (res.ok) {
           const weather = await res.json();
-          this.setState({ weather });
+          setWeather( weather);
         }
         else {
           alert ("Check Weather API key!")
